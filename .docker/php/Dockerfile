@@ -20,8 +20,8 @@ RUN pecl install xdebug \
 COPY php.ini /usr/local/etc/php/php.ini
 COPY php-fpm-pool.conf 	/usr/local/etc/php/pool.d/www.conf
 
-RUN curl -sSk https://getcomposer.org/installer | php -- --disable-tls && \
-	mv composer.phar /usr/local/bin/composer
+RUN curl -sSk https://getcomposer.org/installer | php -- && \
+    mv composer.phar /usr/local/bin/composer
 
 RUN wget --no-check-certificate https://phar.phpunit.de/phpunit-9.5.26.phar && \
     mv phpunit*.phar phpunit.phar && \
