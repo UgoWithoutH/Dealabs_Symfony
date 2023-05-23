@@ -41,4 +41,23 @@ class UtilisateurController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/utilisateur/connexion', name: 'utilisateur_connexion')]
+    public function getCreateAccountForm(Request $request, UtilisateurRepository $utilisateurRepository): Response
+    {
+        $utilisateur = new Utilisateur();
+        $form = $this->createForm(UtilisateurType::class, $utilisateur)
+            ->add('submit', SubmitType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $utilisateur = $form->getData();
+            $utilisateurRepository->save($utilisateur, true);
+            return $this->redirectToRoute('app_utilisateur');
+        }
+
+        return $this->render('create_account.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
 }
