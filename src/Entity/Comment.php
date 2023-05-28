@@ -24,6 +24,12 @@ class Comment
     #[ORM\JoinColumn(nullable: false)]
     private ?User $utilisateur = null;
 
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?Deal $deal = null;
+
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    private ?PromoCode $promoCode = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -64,4 +70,34 @@ class Comment
 
         return $this;
     }
+
+    public function getPromoCode(): ?PromoCode
+    {
+        return $this->promoCode;
+    }
+
+    public function setPromoCode(?PromoCode $promoCode): self
+    {
+        $this->promoCode = $promoCode;
+
+        return $this;
+    }
+
+    /**
+     * @return Deal|null
+     */
+    public function getDeal(): ?Deal
+    {
+        return $this->deal;
+    }
+
+    /**
+     * @param Deal|null $deal
+     */
+    public function setDeal(?Deal $deal): void
+    {
+        $this->deal = $deal;
+    }
+
+
 }

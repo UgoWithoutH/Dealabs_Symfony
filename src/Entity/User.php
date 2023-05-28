@@ -34,15 +34,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Comment::class, orphanRemoval: false)]
+    #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Comment::class)]
     private Collection $comments;
 
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Deal::class, orphanRemoval: false)]
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Deal::class)]
     private Collection $deals;
+
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: PromoCode::class)]
+    private Collection $promoCodes;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->deals = new ArrayCollection();
+        $this->promoCodes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -181,6 +186,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($deal->getAuthor() === $this) {
                 $deal->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PromoCode>
+     */
+    public function getPromoCodes(): Collection
+    {
+        return $this->promoCodes;
+    }
+
+    public function addPromoCode(PromoCode $promoCode): self
+    {
+        if (!$this->promoCodes->contains($promoCode)) {
+            $this->promoCodes->add($promoCode);
+            $promoCode->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removePromoCode(PromoCode $promoCode): self
+    {
+        if ($this->promoCodes->removeElement($promoCode)) {
+            // set the owning side to null (unless already changed)
+            if ($promoCode->getAuthor() === $this) {
+                $promoCode->setAuthor(null);
             }
         }
 

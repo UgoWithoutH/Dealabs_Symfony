@@ -4,14 +4,14 @@ namespace App\Entity;
 
 use App\Enum\Group;
 use App\Enum\TypeOfReduction;
-use App\Repository\DealRepository;
+use App\Repository\PromoCodeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: DealRepository::class)]
-class Deal
+#[ORM\Entity(repositoryClass: PromoCodeRepository::class)]
+class PromoCode
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -39,22 +39,10 @@ class Deal
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $promoCode = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?float $price = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?float $usualPrice = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?float $shippingCost = null;
-
-    #[ORM\Column]
-    private ?bool $freeDelivery = null;
-
     #[ORM\OneToMany(mappedBy: 'promoCode', targetEntity: Comment::class)]
     private Collection $comments;
 
-    #[ORM\ManyToOne(inversedBy: 'deals')]
+    #[ORM\ManyToOne(inversedBy: 'promoCodes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
@@ -158,54 +146,6 @@ class Deal
         return $this;
     }
 
-    public function getPrice(): ?float
-    {
-        return $this->price;
-    }
-
-    public function setPrice(?float $price): self
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    public function getUsualPrice(): ?float
-    {
-        return $this->usualPrice;
-    }
-
-    public function setUsualPrice(?float $usualPrice): self
-    {
-        $this->usualPrice = $usualPrice;
-
-        return $this;
-    }
-
-    public function getShippingCost(): ?float
-    {
-        return $this->shippingCost;
-    }
-
-    public function setShippingCost(?float $shippingCost): self
-    {
-        $this->shippingCost = $shippingCost;
-
-        return $this;
-    }
-
-    public function isFreeDelivery(): ?bool
-    {
-        return $this->freeDelivery;
-    }
-
-    public function setFreeDelivery(bool $freeDelivery): self
-    {
-        $this->freeDelivery = $freeDelivery;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Comment>
      */
@@ -218,7 +158,7 @@ class Deal
     {
         if (!$this->comments->contains($comment)) {
             $this->comments->add($comment);
-            $comment->setDeal($this);
+            $comment->setPromoCode($this);
         }
 
         return $this;
@@ -228,28 +168,24 @@ class Deal
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getDeal() === $this) {
-                $comment->setDeal(null);
+            if ($comment->getPromoCode() === $this) {
+                $comment->setPromoCode(null);
             }
         }
 
         return $this;
     }
 
-    /**
-     * @return User|null
-     */
     public function getAuthor(): ?User
     {
         return $this->author;
     }
 
-    /**
-     * @param User|null $author
-     */
-    public function setAuthor(?User $author): void
+    public function setAuthor(?User $author): self
     {
         $this->author = $author;
+
+        return $this;
     }
 
     public function setGroup(string $group): void
@@ -275,7 +211,7 @@ class Deal
     public function setTypeOfReduction(string $typeOfReduction): void
     {
         $validValues = [
-           TypeOfReduction::EURO,
+            TypeOfReduction::EURO,
             TypeOfReduction::LIVRAISONGRATUITE,
             TypeOfReduction::POURCENTAGE,
         ];
