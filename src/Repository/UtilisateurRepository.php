@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Utilisateur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * @extends ServiceEntityRepository<Utilisateur>
@@ -16,13 +17,22 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class UtilisateurRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $passwordEncoder;
+
+    public function __construct(ManagerRegistry $registry, UserPasswordHasherInterface $passwordEncoder)
     {
         parent::__construct($registry, Utilisateur::class);
+        $this->passwordEncoder = $passwordEncoder;
     }
 
     public function save(Utilisateur $entity, bool $flush = false): void
     {
+        $hashedPassword = $this->passwordEncoder->hashPassword(
+            $entity,
+            $entity->getMotDePasse()
+        );
+        $entity->setMotDePasse($hashedPassword);
+
         $this->getEntityManager()->persist($entity);
 
         if ($flush) {
@@ -37,6 +47,20 @@ class UtilisateurRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findUserconnection(Utilisateur $entity): ?Utilisateur
+    {
+        $utilisateur = $this->findOneBy(['email' => $entity->getEmail()]);
+        if($utilisateur == null){
+            $utilisateur = $this->findOneBy(['pseudo' => $entity->getPseudo()]);
+        }
+
+        if ($utilisateur && $this->passwordEncoder->isPasswordValid($utilisateur, $entity->getMotDePasse())) {
+            return $utilisateur;
+        }
+
+        return null;
     }
 
 //    /**
