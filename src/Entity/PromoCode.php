@@ -47,7 +47,7 @@ class PromoCode
     private ?User $author = null;
 
     #[ORM\Column(type: 'string', length: 20)]
-    private ?string $group = null;
+    private ?string $groupDeal = null;
 
     #[ORM\Column(type: 'string', length: 20)]
     private ?string $typeOfReduction = null;
@@ -188,7 +188,7 @@ class PromoCode
         return $this;
     }
 
-    public function setGroup(string $group): void
+    public function setGroupDeal(string $groupDeal): void
     {
         $validValues = [
             Group::HIGHTECH,
@@ -196,16 +196,16 @@ class PromoCode
             Group::MODEETACCESSOIRE,
         ];
 
-        if (!in_array($group, $validValues, true)) {
+        if (!in_array($groupDeal, $validValues, true)) {
             throw new \InvalidArgumentException('Invalid group value.');
         }
 
-        $this->group = $group;
+        $this->$groupDeal = $groupDeal;
     }
 
-    public function getGroup(): ?string
+    public function getGroupDeal(): ?string
     {
-        return $this->group;
+        return $this->groupDeal;
     }
 
     public function setTypeOfReduction(string $typeOfReduction): void

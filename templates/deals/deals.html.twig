@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello DealsController!{% endblock %}
+
+{% block body %}
+    {% for deal in deals %}
+        <div>
+            <h2>{{ deal.title }}</h2>
+            <p>{{ deal.description }}</p>
+            <!-- Affichez d'autres propriétés du deal ici -->
+        </div>
+    {% endfor %}
+{% endblock %}

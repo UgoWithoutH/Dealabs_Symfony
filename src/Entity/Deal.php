@@ -18,7 +18,7 @@ class Deal
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true, options: ['default' => 0])]
     private ?int $hotLevel = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -59,10 +59,7 @@ class Deal
     private ?User $author = null;
 
     #[ORM\Column(type: 'string', length: 20)]
-    private ?string $group = null;
-
-    #[ORM\Column(type: 'string', length: 20)]
-    private ?string $typeOfReduction = null;
+    private ?string $groupDeal = null;
 
     public function __construct()
     {
@@ -236,23 +233,17 @@ class Deal
         return $this;
     }
 
-    /**
-     * @return User|null
-     */
     public function getAuthor(): ?User
     {
         return $this->author;
     }
 
-    /**
-     * @param User|null $author
-     */
     public function setAuthor(?User $author): void
     {
         $this->author = $author;
     }
 
-    public function setGroup(string $group): void
+    public function setGroupDeal(string $groupDeal): void
     {
         $validValues = [
             Group::HIGHTECH,
@@ -260,35 +251,15 @@ class Deal
             Group::MODEETACCESSOIRE,
         ];
 
-        if (!in_array($group, $validValues, true)) {
+        if (!in_array($groupDeal, $validValues, true)) {
             throw new \InvalidArgumentException('Invalid group value.');
         }
 
-        $this->group = $group;
+        $this->groupDeal = $groupDeal;
     }
 
-    public function getGroup(): ?string
+    public function getGroupDeal(): ?string
     {
-        return $this->group;
-    }
-
-    public function setTypeOfReduction(string $typeOfReduction): void
-    {
-        $validValues = [
-           TypeOfReduction::EURO,
-            TypeOfReduction::LIVRAISONGRATUITE,
-            TypeOfReduction::POURCENTAGE,
-        ];
-
-        if (!in_array($typeOfReduction, $validValues, true)) {
-            throw new \InvalidArgumentException('Invalid group value.');
-        }
-
-        $this->group = $typeOfReduction;
-    }
-
-    public function getTypeOfReduction()
-    {
-        return $this->typeOfReduction;
+        return $this->groupDeal;
     }
 }
