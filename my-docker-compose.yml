@@ -12,7 +12,7 @@ services:
         environment:
           PHP_IDE_CONFIG: serverName=lpa_sf6.docker
         depends_on:
-          - php
+           - php
 
     php:
         build: .docker/php
