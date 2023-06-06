@@ -5,8 +5,21 @@
 {% block body %}
     {% for deal in deals %}
         <div>
+            <div>
+                <button>
+                    <a href="{{ path('app_deals_decrease_hotlevel', {dealId: deal.id}) }}">
+                        -
+                    </a>
+                </button>
+                {{ deal.hotLevel }}
+                <button>
+                    <a href="{{ path('app_deals_increase_hotlevel', {dealId: deal.id}) }}">
+                        +
+                    </a>
+                </button>
+            </div>
             <button>
-                <a href="#">
+                <a href="{{ path('app_deal_detail', {dealId: deal.id}) }}">
                     <h2>{{ deal.title }}</h2>
                     <p>{{ deal.description }}</p>
                 </a>

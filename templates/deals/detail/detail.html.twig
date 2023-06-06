@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+    <h2>{{ deal.title }}</h2>
+    <p>{{ deal.description }}</p>
+
+    <h4>commentaires</h4>
+    <form action="{{ path('app_add_deal_comment', {dealId: deal.id}) }}" method="post">
+        <textarea id="comment-content" name="content" rows="5" cols="33"></textarea>
+        <button type="submit">Ajouter</button>
+    </form>
+
+    {% for comment in deal.comments %}
+        <h6>{{ comment.utilisateur.pseudo }}</h6>
+        <p>{{ comment.content }}</p>
+    {% endfor %}
+{% endblock %}

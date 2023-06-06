@@ -24,6 +24,18 @@ class DealsController extends AbstractController
         ]);
     }
 
+    #[Route('/deals/detail', name: 'app_deal_detail')]
+    public function getDealDetail(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $dealId = $request->query->get('dealId');
+        $deal = $entityManager->getRepository(Deal::class)->find($dealId);
+
+        return $this->render('deals/detail/detail.html.twig', [
+            'controller_name' => 'DealsController',
+            'deal' => $deal,
+        ]);
+    }
+
     #[Route('/deals/add', name: 'app_add_deal')]
     public function addDeal(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -47,5 +59,33 @@ class DealsController extends AbstractController
         return $this->render('deals/add/addDeal.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/deals/hotLevel/decrease', name: 'app_deals_decrease_hotlevel')]
+    public function decreaseHotLevel(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $dealId = $request->query->get('dealId');
+        $deal = $entityManager->getRepository(Deal::class)->find($dealId);
+
+        $deal->setHotLevel($deal->getHotLevel() - 1);
+
+        $entityManager->persist($deal);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_deals');
+    }
+
+    #[Route('/deals/hotLevel/increase', name: 'app_deals_increase_hotlevel')]
+    public function increaseHotLevel(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $dealId = $request->query->get('dealId');
+        $deal = $entityManager->getRepository(Deal::class)->find($dealId);
+
+        $deal->setHotLevel($deal->getHotLevel() + 1);
+
+        $entityManager->persist($deal);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_deals');
     }
 }

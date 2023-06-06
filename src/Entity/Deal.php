@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Enum\Group;
-use App\Enum\TypeOfReduction;
 use App\Repository\DealRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -51,7 +50,7 @@ class Deal
     #[ORM\Column]
     private ?bool $freeDelivery = null;
 
-    #[ORM\OneToMany(mappedBy: 'promoCode', targetEntity: Comment::class)]
+    #[ORM\OneToMany(mappedBy: 'deal', targetEntity: Comment::class)]
     private Collection $comments;
 
     #[ORM\ManyToOne(inversedBy: 'deals')]
@@ -78,7 +77,11 @@ class Deal
 
     public function setHotLevel(int $hotLevel): self
     {
-        $this->hotLevel = $hotLevel;
+        if ($hotLevel < 0) {
+            $this->hotLevel = 0;
+        } else {
+            $this->hotLevel = $hotLevel;
+        }
 
         return $this;
     }

@@ -25,7 +25,7 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        for ($i = 0; $i < 10; ++$i) {
+        for ($i = 0; $i < 3; ++$i) {
             $user = new User();
 
             $user->setEmail($this->faker->email);
@@ -37,7 +37,7 @@ class AppFixtures extends Fixture
             $manager->persist($user);
 
             // Générer des Deals pour l'utilisateur
-            for ($j = 0; $j < 5; ++$j) {
+            for ($j = 0; $j < 4; ++$j) {
                 $deal = new Deal();
                 $deal->setPublicationDatetime(new \DateTime());
                 $deal->setExpirationDatetime(new \DateTime());
@@ -46,6 +46,7 @@ class AppFixtures extends Fixture
                 $deal->setFreeDelivery(false);
                 $deal->setGroupDeal(Group::HIGHTECH);
                 $deal->setAuthor($user);
+                $deal->setHotLevel(0);
 
                 $manager->persist($deal);
 

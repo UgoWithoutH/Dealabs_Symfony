@@ -21,13 +21,15 @@ class Comment
     private ?\DateTimeInterface $datetime = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     private ?User $utilisateur = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[ORM\JoinColumn(name: 'deal_id', referencedColumnName: 'id')]
     private ?Deal $deal = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[ORM\JoinColumn(name: 'promo_code_id', referencedColumnName: 'id')]
     private ?PromoCode $promoCode = null;
 
     public function getId(): ?int
