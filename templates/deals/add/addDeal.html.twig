@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    <div>
+        {{ form_errors(form) }}
+    </div>
+
+    <div class="row">
+        <div class="col">
+            {{ form_row(form.link) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.price) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.usualPrice) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.shippingCost) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.promoCode) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.title) }}
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

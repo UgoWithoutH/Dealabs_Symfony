@@ -1,6 +1,6 @@
 homepage:
-    path: /register
-    controller: App\Controller\RegistrationController::register
+    path: /deals
+    controller: App\Controller\DealsController::getDeals
 controllers:
     resource:
         path: ../src/Controller/

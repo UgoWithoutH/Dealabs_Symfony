@@ -18,7 +18,7 @@ class PromoCode
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true, options: ['default' => 0])]
     private ?int $hotLevel = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -37,7 +37,7 @@ class PromoCode
     private ?string $description = null;
 
     #[ORM\Column(length: 50, nullable: true)]
-    private ?string $promoCode = null;
+    private ?string $promoCodeValue = null;
 
     #[ORM\OneToMany(mappedBy: 'promoCode', targetEntity: Comment::class)]
     private Collection $comments;
@@ -49,7 +49,7 @@ class PromoCode
     #[ORM\Column(type: 'string', length: 20)]
     private ?string $groupDeal = null;
 
-    #[ORM\Column(type: 'string', length: 20)]
+    #[ORM\Column(type: 'string', length: 20, nullable: true)]
     private ?string $typeOfReduction = null;
 
     public function __construct()
@@ -134,14 +134,14 @@ class PromoCode
         return $this;
     }
 
-    public function getPromoCode(): ?string
+    public function getPromoCodeValue(): ?string
     {
-        return $this->promoCode;
+        return $this->promoCodeValue;
     }
 
-    public function setPromoCode(?string $promoCode): self
+    public function setPromoCodeValue(?string $promoCodeValue): self
     {
-        $this->promoCode = $promoCode;
+        $this->promoCodeValue = $promoCodeValue;
 
         return $this;
     }
@@ -200,7 +200,7 @@ class PromoCode
             throw new \InvalidArgumentException('Invalid group value.');
         }
 
-        $this->$groupDeal = $groupDeal;
+        $this->groupDeal = $groupDeal;
     }
 
     public function getGroupDeal(): ?string
@@ -220,10 +220,10 @@ class PromoCode
             throw new \InvalidArgumentException('Invalid group value.');
         }
 
-        $this->group = $typeOfReduction;
+        $this->typeOfReduction = $typeOfReduction;
     }
 
-    public function getTypeOfReduction()
+    public function getTypeOfReduction(): ?string
     {
         return $this->typeOfReduction;
     }

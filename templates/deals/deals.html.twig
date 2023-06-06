@@ -5,9 +5,12 @@
 {% block body %}
     {% for deal in deals %}
         <div>
-            <h2>{{ deal.title }}</h2>
-            <p>{{ deal.description }}</p>
-            <!-- Affichez d'autres propriétés du deal ici -->
+            <button>
+                <a href="#">
+                    <h2>{{ deal.title }}</h2>
+                    <p>{{ deal.description }}</p>
+                </a>
+            </button>
         </div>
     {% endfor %}
 {% endblock %}

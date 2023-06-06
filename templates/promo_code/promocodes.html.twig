@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello DealsController!{% endblock %}
+
+{% block body %}
+    {% for promocode in promocodes %}
+        <div>
+            <h2>{{ promocode.title }}</h2>
+            <p>{{ promocode.description }}</p>
+            <p>{{ promocode.promoCodeValue }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}

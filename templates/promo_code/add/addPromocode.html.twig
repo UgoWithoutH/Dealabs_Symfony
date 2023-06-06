@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Connexion{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+    <div>
+        {{ form_errors(form) }}
+    </div>
+
+    <div class="row">
+        <div class="col">
+            {{ form_row(form.link) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.title) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.description) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.promoCodeValue) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.expirationDatetime) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.typeOfReduction) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.groupDeal) }}
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
