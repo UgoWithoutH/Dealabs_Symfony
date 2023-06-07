@@ -45,6 +45,7 @@ class DealsController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $deal->setPublicationDatetime(new \DateTime());
+            $deal->setHotLevel(0);
             $user = $this->getUser();
 
             if ($user instanceof User) {

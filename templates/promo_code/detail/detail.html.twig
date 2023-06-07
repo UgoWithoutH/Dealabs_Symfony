@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+    <h2>{{ promocode.title }}</h2>
+    <p>{{ promocode.description }}</p>
+    <p>{{ promocode.promoCodeValue }}</p>
+
+    <h4>commentaires</h4>
+    <form action="{{ path('app_add_promocode_comment', {promocodeId: promocode.id}) }}" method="post">
+        <textarea id="comment-content" name="content" rows="5" cols="33"></textarea>
+        <button type="submit">Ajouter</button>
+    </form>
+
+    {% for comment in promocode.comments %}
+        <h6>{{ comment.utilisateur.pseudo }}</h6>
+        <p>{{ comment.content }}</p>
+    {% endfor %}
+{% endblock %}

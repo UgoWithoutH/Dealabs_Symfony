@@ -69,7 +69,11 @@ class PromoCode
 
     public function setHotLevel(int $hotLevel): self
     {
-        $this->hotLevel = $hotLevel;
+        if ($hotLevel < 0) {
+            $this->hotLevel = 0;
+        } else {
+            $this->hotLevel = $hotLevel;
+        }
 
         return $this;
     }

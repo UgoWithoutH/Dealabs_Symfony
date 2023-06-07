@@ -10,23 +10,71 @@
 
     <div class="row">
         <div class="col">
-            {{ form_row(form.link) }}
+            {{ form_row(form.link, { 'attr': { 'id': 'deal_link' } }) }}
         </div>
         <div class="col">
-            {{ form_row(form.price) }}
+            {{ form_row(form.price, { 'attr': { 'id': 'deal_price' } }) }}
         </div>
         <div class="col">
-            {{ form_row(form.usualPrice) }}
+            {{ form_row(form.usualPrice, { 'attr': { 'id': 'deal_usual_price' } }) }}
         </div>
         <div class="col">
-            {{ form_row(form.shippingCost) }}
+            {{ form_row(form.shippingCost, { 'attr': { 'id': 'deal_shipping_cost' } }) }}
         </div>
         <div class="col">
-            {{ form_row(form.promoCode) }}
+            {{ form_row(form.promoCode, { 'attr': { 'id': 'deal_promo_code' } }) }}
         </div>
         <div class="col">
-            {{ form_row(form.title) }}
+            {{ form_row(form.title, { 'attr': { 'id': 'deal_title' } }) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.description, { 'attr': { 'id': 'deal_description' } }) }}
         </div>
     </div>
     {{ form_end(form) }}
+
+    <div id="deal-preview">
+        <h2 id="deal-preview-title"></h2>
+        <p id="deal-preview-description"></p>
+    </div>
+    <script>
+        // Récupérez les éléments du formulaire
+        var form = document.querySelector('form');
+        var inputs = form.querySelectorAll('input, select');
+
+        console.log(inputs);
+        var test = form.querySelector('#deal_form_title');
+        console.log("test");
+        console.log(test);
+        test.textContent = "toto";
+        console.log(test.value);
+        console.log("après")
+
+        // Écoutez les événements de changement des champs du formulaire
+        inputs.forEach(function(input) {
+            input.addEventListener('change', updateDealPreview);
+        });
+
+        // Fonction pour mettre à jour l'aperçu du Deal
+        function updateDealPreview() {
+            // Récupérez les valeurs des champs du formulaire
+            var formData = new FormData(form);
+
+            // Mettez à jour le contenu de l'aperçu avec les données du formulaire
+            var dealPreview = document.getElementById('deal-preview');
+            // Modifiez le contenu de l'élément dealPreview avec les nouvelles données
+            // en utilisant les valeurs des champs du formulaire
+
+            // Exemple : Mettez à jour le titre de l'aperçu du Deal
+            var titleInput = form.querySelector('#deal_form_title');
+            console.log(titleInput);
+            var titlePreview = dealPreview.querySelector('.deal-preview-title');
+
+            var descriptionInput = form.querySelector('#deal_form_description');
+            var descriptionPreview = dealPreview.querySelector('.deal-preview-description');
+
+            titlePreview.textContent = titleInput.value;
+            descriptionPreview.textContent = descriptionInput.value;
+        }
+    </script>
 {% endblock %}

@@ -5,9 +5,26 @@
 {% block body %}
     {% for promocode in promocodes %}
         <div>
-            <h2>{{ promocode.title }}</h2>
-            <p>{{ promocode.description }}</p>
-            <p>{{ promocode.promoCodeValue }}</p>
+            <div>
+                <button>
+                    <a href="{{ path('app_promocodes_decrease_hotlevel', {promocodeId: promocode.id}) }}">
+                        -
+                    </a>
+                </button>
+                {{ promocode.hotLevel }}
+                <button>
+                    <a href="{{ path('app_promocodes_increase_hotlevel', {promocodeId: promocode.id}) }}">
+                        +
+                    </a>
+                </button>
+            </div>
+            <button>
+                <a href="{{ path('app_promocode_detail', {promocodeId: promocode.id}) }}">
+                    <h2>{{ promocode.title }}</h2>
+                    <p>{{ promocode.description }}</p>
+                    <p>{{ promocode.promoCodeValue }}</p>
+                </a>
+            </button>
         </div>
     {% endfor %}
 {% endblock %}
