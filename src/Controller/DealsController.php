@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Deal;
 use App\Entity\User;
 use App\Form\DealFormType;
@@ -18,7 +19,26 @@ class DealsController extends AbstractController
     {
         $deals = $entityManager->getRepository(Deal::class)->findAll();
 
+        usort($deals, function ($a, $b) {
+            return count($b->getComments()) - count($a->getComments());
+        });
+
         return $this->render('deals/deals.html.twig', [
+            'controller_name' => 'DealsController',
+            'deals' => $deals,
+        ]);
+    }
+
+    #[Route('/deals/hot', name: 'app_deals_hot')]
+    public function getHotDeals(EntityManagerInterface $entityManager): Response
+    {
+        $deals = $entityManager->getRepository(Deal::class)->findHotDeals();
+
+        usort($deals, function ($a, $b) {
+            return $b->getPublicationDatetime() <=> $a->getPublicationDatetime();
+        });
+
+        return $this->render('deals/hot/dealsHot.html.twig', [
             'controller_name' => 'DealsController',
             'deals' => $deals,
         ]);
@@ -30,9 +50,15 @@ class DealsController extends AbstractController
         $dealId = $request->query->get('dealId');
         $deal = $entityManager->getRepository(Deal::class)->find($dealId);
 
+        $comments = $entityManager->getRepository(Comment::class)->findBy(
+            ['deal' => $deal],
+            ['datetime' => 'DESC']
+        );
+
         return $this->render('deals/detail/detail.html.twig', [
             'controller_name' => 'DealsController',
             'deal' => $deal,
+            'comments' => $comments,
         ]);
     }
 

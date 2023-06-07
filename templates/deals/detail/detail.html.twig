@@ -12,8 +12,8 @@
         <button type="submit">Ajouter</button>
     </form>
 
-    {% for comment in deal.comments %}
-        <h6>{{ comment.utilisateur.pseudo }}</h6>
+    {% for comment in comments %}
+        <h6>{{ comment.utilisateur.pseudo }}</h6> <span>{{ comment.datetime|time_elapsed }}</span>
         <p>{{ comment.content }}</p>
     {% endfor %}
 {% endblock %}

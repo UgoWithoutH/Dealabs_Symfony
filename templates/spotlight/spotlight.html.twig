@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DealsController!{% endblock %}
+{% block title %}Hello SpotlightController!{% endblock %}
 
 {% block body %}
-    <a href="{{ path('app_deals') }}">Tous les deals</a>
-    <a href="{{ path('app_deals_hot') }}">Hot</a>
-    {% for deal in deals %}
+    <a href="{{ path('app_spotlight') }}">A la une</a>
+    <a href="{{ path('app_spotlight_hot') }}">Hot</a>
+    {% for deal in filteredDeals %}
         <div>
             <div>
                 <button>

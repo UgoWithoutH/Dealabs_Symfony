@@ -13,8 +13,8 @@
         <button type="submit">Ajouter</button>
     </form>
 
-    {% for comment in promocode.comments %}
-        <h6>{{ comment.utilisateur.pseudo }}</h6>
+    {% for comment in comments %}
+        <h6>{{ comment.utilisateur.pseudo }}</h6> <span>{{ comment.datetime }}</span>
         <p>{{ comment.content }}</p>
     {% endfor %}
 {% endblock %}

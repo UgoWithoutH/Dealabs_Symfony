@@ -39,6 +39,15 @@ class DealRepository extends ServiceEntityRepository
         }
     }
 
+    public function findHotDeals()
+    {
+        $qb = $this->createQueryBuilder('d');
+        $qb->where('d.hotLevel > :hotLevel')
+            ->setParameter('hotLevel', 100);
+
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Deal[] Returns an array of Deal objects
 //     */

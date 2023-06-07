@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\PromoCode;
 use App\Entity\User;
 use App\Form\PromoCodeFormType;
@@ -18,9 +19,28 @@ class PromoCodeController extends AbstractController
     {
         $promocodes = $entityManager->getRepository(PromoCode::class)->findAll();
 
+        usort($promocodes, function ($a, $b) {
+            return count($b->getComments()) - count($a->getComments());
+        });
+
         return $this->render('promo_code/promocodes.html.twig', [
             'controller_name' => 'PromoCodeController',
             'promocodes' => $promocodes,
+        ]);
+    }
+
+    #[Route('/promocodes/hot', name: 'app_promocodes_hot')]
+    public function getHotPromoCodes(EntityManagerInterface $entityManager): Response
+    {
+        $promocodes = $entityManager->getRepository(PromoCode::class)->findHotPromoCodes();
+
+        usort($promocodes, function ($a, $b) {
+            return $b->getPublicationDatetime() <=> $a->getPublicationDatetime();
+        });
+
+        return $this->render('deals/hot/dealsHot.html.twig', [
+            'controller_name' => 'DealsController',
+            'deals' => $promocodes,
         ]);
     }
 
@@ -30,9 +50,15 @@ class PromoCodeController extends AbstractController
         $promocodeId = $request->query->get('promocodeId');
         $promocode = $entityManager->getRepository(PromoCode::class)->find($promocodeId);
 
+        $comments = $entityManager->getRepository(Comment::class)->findBy(
+            ['promoCode' => $promocode],
+            ['datetime' => 'DESC']
+        );
+
         return $this->render('promo_code/detail/detail.html.twig', [
             'controller_name' => 'PromoCodeController',
             'promocode' => $promocode,
+            'comments' => $comments,
         ]);
     }
 

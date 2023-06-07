@@ -39,6 +39,15 @@ class PromoCodeRepository extends ServiceEntityRepository
         }
     }
 
+    public function findHotPromoCodes()
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb->where('p.hotLevel > :hotLevel')
+            ->setParameter('hotLevel', 100);
+
+        return $qb->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return PromoCode[] Returns an array of PromoCode objects
 //     */
