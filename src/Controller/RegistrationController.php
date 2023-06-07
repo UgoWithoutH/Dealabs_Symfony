@@ -42,7 +42,7 @@ class RegistrationController extends AbstractController
             );
 
             if (null != $user) {
-                return $this->redirectToRoute('app_deals');
+                return $this->redirectToRoute('app_spotlight');
             }
         }
 
