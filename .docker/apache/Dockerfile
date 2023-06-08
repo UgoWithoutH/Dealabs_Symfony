@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:11
 
 ENV HTTPD_PREFIX /usr/local/apache2
 ENV PATH $HTTPD_PREFIX/bin:$PATH

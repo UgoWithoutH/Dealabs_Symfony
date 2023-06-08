@@ -8,7 +8,8 @@ RUN apt-get update \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
     libpng-dev \
-    sudo
+    sudo \
+    nodejs npm
 
 RUN apt install -y libldap2-dev
 
@@ -48,6 +49,8 @@ RUN echo "dev ALL=(ALL) ALL" > /etc/sudoers
 
 WORKDIR /var/www/lpa_sf6
 ##</romaricp>##
+
+RUN npm install
 
 EXPOSE 9000
 CMD ["php-fpm"]
