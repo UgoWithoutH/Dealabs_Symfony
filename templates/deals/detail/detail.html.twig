@@ -3,6 +3,9 @@
 {% block title %}{% endblock %}
 
 {% block body %}
+    <a href="{{ path('app_deals_report', {dealId: deal.id}) }}">Signaler le deal</a>
+    <a href="{{ path('app_deals_save', {dealId: deal.id}) }}">Sauvegarder le deal</a>
+
     <h2>{{ deal.title }}</h2>
     <p>{{ deal.description }}</p>
 

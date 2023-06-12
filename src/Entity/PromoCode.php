@@ -52,9 +52,13 @@ class PromoCode
     #[ORM\Column(type: 'string', length: 20, nullable: true)]
     private ?string $typeOfReduction = null;
 
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'promoCodesSave')]
+    private Collection $usersSave;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->usersSave = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -230,5 +234,32 @@ class PromoCode
     public function getTypeOfReduction(): ?string
     {
         return $this->typeOfReduction;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsersSave(): Collection
+    {
+        return $this->usersSave;
+    }
+
+    public function addUsersSave(User $usersSave): static
+    {
+        if (!$this->usersSave->contains($usersSave)) {
+            $this->usersSave->add($usersSave);
+            $usersSave->addPromoCodesSave($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsersSave(User $usersSave): static
+    {
+        if ($this->usersSave->removeElement($usersSave)) {
+            $usersSave->removePromoCodesSave($this);
+        }
+
+        return $this;
     }
 }

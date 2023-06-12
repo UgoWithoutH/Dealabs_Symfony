@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a href="{{ path('app_profil_save') }}">
+        Deals et Codes promos sauvegardés
+    </a>
+    {% block profilbody %}{% endblock %}
+{% endblock %}

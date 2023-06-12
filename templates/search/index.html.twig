@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SearchController!{% endblock %}
+
+{% block body %}
+    <h2>Résultats de recherche pour "{{ searchTerm }}"</h2>
+
+    {% if filteredDtos is not empty %}
+        {% for dto in filteredDtos %}
+            {% if dto.dealType %}
+                <p>{{ dto.title }}</p>
+                <p>{{ dto.description }}</p>
+            {% else%}
+                <p>{{ dto.code }}</p>
+                <p>{{ dto.description }}</p>
+                <p>{{ dto.promoCodeValue }}</p>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <p>Aucun deal trouvé.</p>
+    {% endif %}
+{% endblock %}

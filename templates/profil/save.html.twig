@@ -1,0 +1,15 @@
+{% extends 'base_profil.html.twig' %}
+
+{% block profilbody %}
+    <h2>Deals et Codes promos sauvegardés</h2>
+    {% for deal in dealsDtoSave %}
+        {% if deal.dealType %}
+            <p>{{ deal.title }}</p>
+            <p>{{ deal.description }}</p>
+        {% else%}
+            <p>{{ deal.code }}</p>
+            <p>{{ deal.description }}</p>
+            <p>{{ deal.promoCodeValue }}</p>
+        {% endif %}
+    {% endfor %}
+{% endblock %}

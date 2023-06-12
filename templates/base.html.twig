@@ -38,6 +38,17 @@
                     Poster un code promo
                 </a>
             </div>
+            <div>
+                <a href="{{ path('app_profil_save') }}">
+                    Profil
+                </a>
+            </div>
+            <div>
+                <form action="{{ path('app_search') }}" method="GET">
+                    <input type="text" name="searchTerm" placeholder="Recherche">
+                    <button type="submit">Rechercher</button>
+                </form>
+            </div>
         </div>
     </header>
     <body>

@@ -10,6 +10,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PromoCodeController extends AbstractController
@@ -114,5 +116,45 @@ class PromoCodeController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('app_promocodes');
+    }
+
+    #[Route('/promocodes/report', name: 'app_promocodes_report')]
+    public function reportPromocode(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
+    {
+        $promocodeId = $request->query->get('promocodeId');
+        $promocode = $entityManager->getRepository(PromoCode::class)->find($promocodeId);
+
+        $email = (new Email())
+            ->from('report-noreply@gmail.com')
+            ->to('admin@gmail.com')
+            ->subject('Promo code report')
+            ->text('This promo code was reported'."\n".
+                '- promo code id: '.$promocode->getId()."\n".
+                '- promo code title: '.$promocode->getTitle()."\n".
+                '- promo code description: '.$promocode->getDescription()."\n");
+
+        $mailer->send($email);
+
+        return $this->redirectToRoute('app_promocode_detail', [
+            'promocodeId' => $promocode->getId(),
+        ]);
+    }
+
+    #[Route('/promocodes/save', name: 'app_promocodes_save')]
+    public function saveDeal(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $promocodeId = $request->query->get('dealId');
+        $promocode = $entityManager->getRepository(PromoCode::class)->find($promocodeId);
+        $user = $this->getUser();
+
+        if ($user instanceof User) {
+            $user->addPromoCodesSave($promocode);
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_deal_detail', [
+            'promocodeId' => $promocode->getId(),
+        ]);
     }
 }

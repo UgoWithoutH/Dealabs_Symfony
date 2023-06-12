@@ -3,6 +3,9 @@
 {% block title %}{% endblock %}
 
 {% block body %}
+    <a href="{{ path('app_promocodes_report', {promocodeId: promocode.id}) }}">Signaler le code promo</a>
+    <a href="{{ path('app_promocodes_save', {promocodeId: promocode.id}) }}">Sauvegarder le code promo</a>
+
     <h2>{{ promocode.title }}</h2>
     <p>{{ promocode.description }}</p>
     <p>{{ promocode.promoCodeValue }}</p>

@@ -40,11 +40,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: PromoCode::class)]
     private Collection $promoCodes;
 
+    #[ORM\ManyToMany(targetEntity: Deal::class, inversedBy: 'userSave')]
+    private Collection $dealsSave;
+
+    #[ORM\ManyToMany(targetEntity: PromoCode::class, inversedBy: 'usersSave')]
+    private Collection $promoCodesSave;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->deals = new ArrayCollection();
         $this->promoCodes = new ArrayCollection();
+        $this->dealsSave = new ArrayCollection();
+        $this->promoCodesSave = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -159,9 +167,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
     public function getDeals(): Collection
     {
         return $this->deals;
@@ -215,6 +220,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $promoCode->setAuthor(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Deal>
+     */
+    public function getDealsSave(): Collection
+    {
+        return $this->dealsSave;
+    }
+
+    public function addDealsSave(Deal $dealsSave): static
+    {
+        if (!$this->dealsSave->contains($dealsSave)) {
+            $this->dealsSave->add($dealsSave);
+        }
+
+        return $this;
+    }
+
+    public function removeDealsSave(Deal $dealsSave): static
+    {
+        $this->dealsSave->removeElement($dealsSave);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, PromoCode>
+     */
+    public function getPromoCodesSave(): Collection
+    {
+        return $this->promoCodesSave;
+    }
+
+    public function addPromoCodesSave(PromoCode $promoCodesSave): static
+    {
+        if (!$this->promoCodesSave->contains($promoCodesSave)) {
+            $this->promoCodesSave->add($promoCodesSave);
+        }
+
+        return $this;
+    }
+
+    public function removePromoCodesSave(PromoCode $promoCodesSave): static
+    {
+        $this->promoCodesSave->removeElement($promoCodesSave);
 
         return $this;
     }

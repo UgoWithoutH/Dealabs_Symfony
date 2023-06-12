@@ -7,9 +7,12 @@ use App\Entity\Deal;
 use App\Entity\User;
 use App\Form\DealFormType;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DealsController extends AbstractController
@@ -114,5 +117,45 @@ class DealsController extends AbstractController
         $entityManager->flush();
 
         return $this->redirectToRoute('app_deals');
+    }
+
+    #[Route('/deals/report', name: 'app_deals_report')]
+    public function reportDeal(Request $request, EntityManagerInterface $entityManager, MailerInterface $mailer): Response
+    {
+        $dealId = $request->query->get('dealId');
+        $deal = $entityManager->getRepository(Deal::class)->find($dealId);
+
+        $email = (new Email())
+            ->from('report-noreply@gmail.com')
+            ->to('admin@gmail.com')
+            ->subject('Deal report')
+            ->text('This deal was reported'."\n".
+                '- Deal id: '.$deal->getId()."\n".
+                '- Deal title: '.$deal->getTitle()."\n".
+                '- Deal description: '.$deal->getDescription()."\n");
+
+        $mailer->send($email);
+
+        return $this->redirectToRoute('app_deal_detail', [
+            'dealId' => $deal->getId(),
+        ]);
+    }
+
+    #[Route('/deals/save', name: 'app_deals_save')]
+    public function saveDeal(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $dealId = $request->query->get('dealId');
+        $deal = $entityManager->getRepository(Deal::class)->find($dealId);
+        $user = $this->getUser();
+
+        if ($user instanceof User) {
+            $user->addDealsSave($deal);
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_deal_detail', [
+            'dealId' => $deal->getId(),
+        ]);
     }
 }

@@ -25,6 +25,7 @@ class DealPromoCodeDTO
     private ?User $author;
     private ?string $groupDeal;
     private ?string $typeOfReduction;
+    private bool $dealType;
 
     public function getId(): ?int
     {
@@ -171,6 +172,16 @@ class DealPromoCodeDTO
         $this->typeOfReduction = $typeOfReduction;
     }
 
+    public function isDealType(): ?bool
+    {
+        return $this->dealType;
+    }
+
+    public function setDealType(?bool $dealType): void
+    {
+        $this->dealType = $dealType;
+    }
+
     public function setDeal(Deal $deal): void
     {
         $this->id = $deal->getId();
@@ -189,6 +200,7 @@ class DealPromoCodeDTO
         $this->author = $deal->getAuthor();
         $this->groupDeal = $deal->getGroupDeal();
         $this->typeOfReduction = null;
+        $this->dealType = true;
     }
 
     public function setPromoCode(PromoCode $promoCode): void
@@ -209,5 +221,6 @@ class DealPromoCodeDTO
         $this->author = $promoCode->getAuthor();
         $this->groupDeal = $promoCode->getGroupDeal();
         $this->typeOfReduction = $promoCode->getTypeOfReduction();
+        $this->dealType = false;
     }
 }
