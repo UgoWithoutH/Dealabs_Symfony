@@ -38,7 +38,7 @@ class SearchController extends AbstractController
             }
         }
 
-        return $this->render('search/index.html.twig', [
+        return $this->render('search/alerts.html.twig', [
             'searchTerm' => $searchTerm,
             'filteredDtos' => $filteredDtos,
         ]);

@@ -1,8 +1,17 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <a href="{{ path('app_profil_insight') }}">
+        Aperçu
+    </a><br>
+    <a href="{{ path('app_profil_posted_deals') }}">
+        Deals
+    </a><br>
     <a href="{{ path('app_profil_save') }}">
         Deals et Codes promos sauvegardés
-    </a>
+    </a><br>
+    <a href="{{ path('app_alert') }}">
+        Mes alertes
+    </a><br>
     {% block profilbody %}{% endblock %}
 {% endblock %}

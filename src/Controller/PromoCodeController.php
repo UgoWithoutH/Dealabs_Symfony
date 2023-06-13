@@ -6,6 +6,8 @@ use App\Entity\Comment;
 use App\Entity\PromoCode;
 use App\Entity\User;
 use App\Form\PromoCodeFormType;
+use App\Utility\AlertsChecker;
+use App\Utility\BadgesChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -82,6 +84,8 @@ class PromoCodeController extends AbstractController
             $entityManager->persist($promocode);
             $entityManager->flush();
 
+            BadgesChecker::checkCobaye($user, $entityManager);
+            AlertsChecker::checkAlerts($promocode, $entityManager);
             return $this->redirectToRoute('app_promocodes');
         }
 
@@ -101,6 +105,13 @@ class PromoCodeController extends AbstractController
         $entityManager->persist($promocode);
         $entityManager->flush();
 
+        $user = $this->getUser();
+        if ($user instanceof User) {
+            $user->setNumberOfVotes($user->getNumberOfVotes() + 1);
+            BadgesChecker::checkSurveillant($user, $entityManager);
+            AlertsChecker::checkAlerts($promocode, $entityManager);
+        }
+
         return $this->redirectToRoute('app_promocodes');
     }
 
@@ -114,6 +125,13 @@ class PromoCodeController extends AbstractController
 
         $entityManager->persist($promocode);
         $entityManager->flush();
+
+        $user = $this->getUser();
+        if ($user instanceof User) {
+            $user->setNumberOfVotes($user->getNumberOfVotes() + 1);
+            BadgesChecker::checkSurveillant($user, $entityManager);
+            AlertsChecker::checkAlerts($promocode, $entityManager);
+        }
 
         return $this->redirectToRoute('app_promocodes');
     }

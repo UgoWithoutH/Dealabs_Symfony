@@ -6,8 +6,9 @@ use App\Entity\Comment;
 use App\Entity\Deal;
 use App\Entity\User;
 use App\Form\DealFormType;
+use App\Utility\AlertsChecker;
+use App\Utility\BadgesChecker;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,7 +53,6 @@ class DealsController extends AbstractController
     {
         $dealId = $request->query->get('dealId');
         $deal = $entityManager->getRepository(Deal::class)->find($dealId);
-
         $comments = $entityManager->getRepository(Comment::class)->findBy(
             ['deal' => $deal],
             ['datetime' => 'DESC']
@@ -83,6 +83,8 @@ class DealsController extends AbstractController
             $entityManager->persist($deal);
             $entityManager->flush();
 
+            BadgesChecker::checkCobaye($user, $entityManager);
+            AlertsChecker::checkAlerts($deal, $entityManager);
             return $this->redirectToRoute('app_deals');
         }
 
@@ -102,6 +104,13 @@ class DealsController extends AbstractController
         $entityManager->persist($deal);
         $entityManager->flush();
 
+        $user = $this->getUser();
+        if ($user instanceof User) {
+            $user->setNumberOfVotes($user->getNumberOfVotes() + 1);
+            BadgesChecker::checkSurveillant($user, $entityManager);
+            AlertsChecker::checkAlerts($deal, $entityManager);
+        }
+
         return $this->redirectToRoute('app_deals');
     }
 
@@ -115,6 +124,13 @@ class DealsController extends AbstractController
 
         $entityManager->persist($deal);
         $entityManager->flush();
+
+        $user = $this->getUser();
+        if ($user instanceof User) {
+            $user->setNumberOfVotes($user->getNumberOfVotes() + 1);
+            BadgesChecker::checkSurveillant($user, $entityManager);
+            AlertsChecker::checkAlerts($deal, $entityManager);
+        }
 
         return $this->redirectToRoute('app_deals');
     }

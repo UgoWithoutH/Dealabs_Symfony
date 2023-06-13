@@ -31,6 +31,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\Column]
+    private int $numberOfVotes = 0;
+
     #[ORM\OneToMany(mappedBy: 'utilisateur', targetEntity: Comment::class)]
     private Collection $comments;
 
@@ -46,6 +49,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: PromoCode::class, inversedBy: 'usersSave')]
     private Collection $promoCodesSave;
 
+    #[ORM\ManyToMany(targetEntity: Badge::class, mappedBy: 'users')]
+    private Collection $badges;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Alert::class)]
+    private Collection $alerts;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -53,6 +62,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->promoCodes = new ArrayCollection();
         $this->dealsSave = new ArrayCollection();
         $this->promoCodesSave = new ArrayCollection();
+        $this->badges = new ArrayCollection();
+        $this->alerts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -135,6 +146,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getNumberOfVotes(): int
+    {
+        return $this->numberOfVotes;
+    }
+
+    public function setNumberOfVotes(int $nb): self
+    {
+        $this->numberOfVotes = $nb >= 0 ? $nb : 0;
+
+        return $this;
     }
 
     /**
@@ -268,6 +291,63 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removePromoCodesSave(PromoCode $promoCodesSave): static
     {
         $this->promoCodesSave->removeElement($promoCodesSave);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Badge>
+     */
+    public function getBadges(): Collection
+    {
+        return $this->badges;
+    }
+
+    public function addBadge(Badge $badge): static
+    {
+        if (!$this->badges->contains($badge)) {
+            $this->badges->add($badge);
+            $badge->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBadge(Badge $badge): static
+    {
+        if ($this->badges->removeElement($badge)) {
+            $badge->removeUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Alert>
+     */
+    public function getAlerts(): Collection
+    {
+        return $this->alerts;
+    }
+
+    public function addAlert(Alert $alert): static
+    {
+        if (!$this->alerts->contains($alert)) {
+            $this->alerts->add($alert);
+            $alert->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlert(Alert $alert): static
+    {
+        if ($this->alerts->removeElement($alert)) {
+            // set the owning side to null (unless already changed)
+            if ($alert->getUser() === $this) {
+                $alert->setUser(null);
+            }
+        }
 
         return $this;
     }

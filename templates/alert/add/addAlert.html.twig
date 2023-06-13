@@ -1,0 +1,27 @@
+{% extends 'base_profil_alert.html.twig' %}
+
+{% block profilalertbody %}
+    {{ form_start(form) }}
+    <div>
+        {{ form_errors(form) }}
+    </div>
+
+    <div class="row">
+        <div class="col">
+            {{ form_row(form.keyword) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.minimumTemperature) }}
+        </div>
+        <div class="col">
+            {{ form_row(form.emailNotification) }}
+    </div>
+    {{ form_end(form) }}
+
+    {% if alerts is not null %}
+        {% for alert in alerts %}
+            <span>mot clef : {{ alert.keyword }}</span><br>
+            <span>température minimale : {{ alert.minimumTemperature }}</span><br>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

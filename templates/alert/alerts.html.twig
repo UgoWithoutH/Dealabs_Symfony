@@ -1,0 +1,17 @@
+{% extends 'base_profil_alert.html.twig' %}
+
+{% block profilalertbody %}
+    {% if alerts is not null %}
+        {% for alert in alerts %}
+            {% for deal in alert.deals %}
+                <h2>{{ deal.title }}</h2>
+                <p>{{ deal.description }}</p>
+            {% endfor %}
+            {% for promoCode in alert.promoCodes %}
+                <h2>{{ promocode.title }}</h2>
+                <p>{{ promocode.description }}</p>
+                <p>{{ promocode.promoCodeValue }}</p>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+{% endblock %}

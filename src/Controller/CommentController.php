@@ -6,6 +6,7 @@ use App\Entity\Comment;
 use App\Entity\Deal;
 use App\Entity\PromoCode;
 use App\Entity\User;
+use App\Utility\BadgesChecker;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +34,7 @@ class CommentController extends AbstractController
         $entityManager->persist($comment);
         $entityManager->flush();
 
+        BadgesChecker::checkRapportDeStage($user, $entityManager);
         return $this->redirectToRoute('app_deal_detail', [
             'dealId' => $dealId,
         ]);
@@ -57,6 +59,7 @@ class CommentController extends AbstractController
         $entityManager->persist($comment);
         $entityManager->flush();
 
+        BadgesChecker::checkRapportDeStage($user, $entityManager);
         return $this->redirectToRoute('app_promocode_detail', [
             'promocodeId' => $promocodeId,
         ]);

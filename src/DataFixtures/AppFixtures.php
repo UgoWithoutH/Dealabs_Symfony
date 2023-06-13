@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Badge;
 use App\Entity\Comment;
 use App\Entity\Deal;
 use App\Entity\User;
@@ -41,8 +42,8 @@ class AppFixtures extends Fixture
                 $deal = new Deal();
                 $deal->setPublicationDatetime(new \DateTime());
                 $deal->setExpirationDatetime(new \DateTime());
-                $deal->setTitle($this->faker->sentence);
-                $deal->setDescription($this->faker->paragraph);
+                $deal->setTitle($this->faker->text(100));
+                $deal->setDescription($this->faker->text(255));
                 $deal->setFreeDelivery(false);
                 $deal->setGroupDeal(Group::HIGHTECH);
                 $deal->setAuthor($user);
@@ -60,6 +61,19 @@ class AppFixtures extends Fixture
                     $manager->persist($comment);
                 }
             }
+        }
+
+        $badges = [
+            'Surveillant' => 'Vous avez voté pour 10 deals',
+            'Cobaye' => 'Vous avez posté au moins 10 deals',
+            'Rapport de stage' => 'Vous avez posté au moins 10 commentaires',
+        ];
+
+        foreach ($badges as $clef => $valeur) {
+            $badge = new Badge();
+            $badge->setTitle($clef);
+            $badge->setDescription($valeur);
+            $manager->persist($badge);
         }
 
         $manager->flush();

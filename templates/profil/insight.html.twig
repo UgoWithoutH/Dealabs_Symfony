@@ -1,0 +1,30 @@
+{% extends 'base_profil.html.twig' %}
+
+{% block profilbody %}
+    <h2>Statistiques</h2>
+    <span>Nombre de publications : {{ postedCount }}</span><br>
+    <span>Nombre de commentaires : {{ commentsCount }}</span><br>
+
+    {% if highestRatedItem is not null %}
+        <span>Note du deal posté le plus hot : {{ highestRatedItem.hotLevel }}</span><br>
+    {% endif %}
+
+    {% if averageRatingOneYear is not null %}
+        <span>Moyenne des notes sur 1 an : {{ averageRatingOneYear }}</span><br>
+    {% endif %}
+
+    {% if percentageHot is not null %}
+        <span>Pourcentage de deals hot : {{ percentageHot }}</span><br>
+    {% endif %}
+
+    {% if badges is empty %}
+        <br><span>Aucun badge</span><br>
+    {% elseif badges is not empty %}
+        <h2>Badges</h2>
+        <ul>
+            {% for badge in badges %}
+                <li>{{ badge.title }} - {{ badge.description }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

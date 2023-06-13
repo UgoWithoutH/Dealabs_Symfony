@@ -1,0 +1,11 @@
+{% extends 'base_profil.html.twig' %}
+
+{% block profilbody %}
+    <a href="{{ path('app_alert') }}">
+        Fil d'alertes
+    </a><br>
+    <a href="{{ path('app_alert_add') }}">
+        Gérer mes alertes
+    </a><br>
+    {% block profilalertbody %}{% endblock %}
+{% endblock %}
