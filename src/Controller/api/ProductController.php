@@ -101,6 +101,6 @@ class ProductController extends AbstractController
             $data['promoCodesSave'] = $userPromoCodesSave;
         }
 
-        return $this->json($data, 200, [], ['groups' => ['exclude_user']]);
+        return $this->json($data);
     }
 }
