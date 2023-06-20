@@ -48,6 +48,17 @@ class PromoCodeRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findDealsByDateRange(\DateTimeInterface $startDate, \DateTimeInterface $endDate): array
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.publicationDatetime >= :start_date')
+            ->andWhere('d.publicationDatetime <= :end_date')
+            ->setParameter('start_date', $startDate)
+            ->setParameter('end_date', $endDate)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return PromoCode[] Returns an array of PromoCode objects
 //     */

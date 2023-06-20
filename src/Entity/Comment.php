@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CommentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CommentRepository::class)]
 class Comment
@@ -26,10 +27,12 @@ class Comment
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(name: 'deal_id', referencedColumnName: 'id')]
+    #[Groups(['exclude_deal'])]
     private ?Deal $deal = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(name: 'promo_code_id', referencedColumnName: 'id')]
+    #[Groups(['exclude_promocode'])]
     private ?PromoCode $promoCode = null;
 
     public function getId(): ?int

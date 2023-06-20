@@ -20,9 +20,12 @@ use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
+    private UserPasswordHasherInterface $passwordHasher;
+
     public function __construct(ManagerRegistry $registry, UserPasswordHasherInterface $passwordHasher)
     {
         parent::__construct($registry, User::class);
+        $this->passwordHasher = $passwordHasher;
     }
 
     public function save(User $entity, bool $flush = false): void
@@ -47,6 +50,21 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function findUserByEmailAndPassword($email, $password)
+    {
+        $user = $this->findOneBy(['email' => $email]);
+
+        if (!$user) {
+            return null;
+        }
+
+        if ($this->passwordHasher->isPasswordValid($user, $password)) {
+            return $user;
+        }
+
+        return null;
     }
 
     /**
