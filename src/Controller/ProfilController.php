@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProfilController extends AbstractController
 {
-    #[Route('/profil/insight', name: 'app_profil_insight')]
+    #[Route('/profile/insight', name: 'app_profil_insight')]
     public function insight(EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
@@ -91,7 +91,7 @@ class ProfilController extends AbstractController
             $badges = $user->getBadges();
         }
 
-        return $this->render('profil/insight.html.twig', [
+        return $this->render('profile/insight.html.twig', [
             'postedCount' => $postedCount,
             'commentsCount' => $commentsCount,
             'highestRatedItem' => $highestRatedItem,
@@ -101,7 +101,7 @@ class ProfilController extends AbstractController
         ]);
     }
 
-    #[Route('/profil/postedDeals', name: 'app_profil_posted_deals')]
+    #[Route('/profile/postedDeals', name: 'app_profil_posted_deals')]
     public function postedDeals(): Response
     {
         $user = $this->getUser();
@@ -127,12 +127,12 @@ class ProfilController extends AbstractController
             return $b->getPublicationDatetime() <=> $a->getPublicationDatetime();
         });
 
-        return $this->render('profil/deals.html.twig', [
+        return $this->render('profile/deals.html.twig', [
             'dealsDto' => $dtoList,
         ]);
     }
 
-    #[Route('/profil/save', name: 'app_profil_save')]
+    #[Route('/profile/save', name: 'app_profil_save')]
     public function save(): Response
     {
         $user = $this->getUser();
@@ -158,7 +158,7 @@ class ProfilController extends AbstractController
             return $b->getPublicationDatetime() <=> $a->getPublicationDatetime();
         });
 
-        return $this->render('profil/save.html.twig', [
+        return $this->render('profile/save.html.twig', [
             'dealsDtoSave' => $dtoList,
         ]);
     }

@@ -25,6 +25,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 30)]
     private ?string $pseudo = null;
 
+    #[ORM\Column(length: 100)]
+    private ?string $description = null;
+
     #[ORM\Column]
     private array $roles = [];
 
@@ -93,6 +96,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->pseudo = $pseudo;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string|null $description
+     */
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
     }
 
     /**
